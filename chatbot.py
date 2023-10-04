@@ -8,7 +8,7 @@ import os
 import pyautogui
 
 # Caminho para a pasta de destino
-pasta_destino = r'C:\Users\arthu\Downloads\DOWNLOADS_'
+pasta_destino = r'C:/Users/ProOcupacional/Downloads/DOWNLOADS_'
 url_site = 'https://secure.d4sign.com.br/login.html'
 
 # Inicialize o driver do Selenium (certifique-se de ter o WebDriver adequado instalado e configurado)
@@ -51,29 +51,25 @@ wait = WebDriverWait(driver, 30)
 open1 = driver.find_element(By.XPATH, "/html/body/div[2]/div/div[2]/div[2]/div[2]/div/div[3]/div[4]/button")
 open1.click()
 time.sleep(2)
-open2 = wait.until(EC.element_to_be_clickable((By.XPATH, "/html/body/div[2]/div/div[2]/div[2]/div[2]/div/div[3]/div[4]/ul/li[5]/a")))
+open2 = wait.until(
+    EC.element_to_be_clickable((By.XPATH, "/html/body/div[2]/div/div[2]/div[2]/div[2]/div/div[3]/div[4]/ul/li[5]/a")))
 open2.click()
 wait = WebDriverWait(driver, 30)
-elemento_data = driver.find_elements(By.XPATH, '//small[contains(text(), "29 Sep 2023")]')
-trespontosdownload = driver.find_elements(By.XPATH, "/html/body/div[2]/div/div[2]/div[2]/div[2]/div/div[4]/table/tbody/tr[1]/td[6]/div/i")
-quantidade_elementos = len(elemento_data)
+#elemento_data = driver.find_elements(By.XPATH, '//small[contains(text(), "02 Oct 2023")]')
+elemento_data = driver.find_elements(By.XPATH, '//*[@id="td-data-lista-conteudo"]/small')
+#elemento_texto = elemento_data.text
+trespontosdownload = driver.find_elements(By.XPATH, "/html/body/div[2]/div/div[2]/div[2]/div[2]/div/div[4]/table/tbody/tr/td[6]/div/i")
+texto_desejado = "02 Oct 2023"
 
 time.sleep(2)
 
-for elemento, trespontos in zip(elemento_data, trespontosdownload):
-    try:
+def verificacao_dataeponto():
+    for i in range(min(len(elemento_data), len(trespontosdownload))):
+        data_element = elemento_data[i]
+        ponto_element = trespontosdownload[i]
 
-        data_elemento = elemento.text
-
-        if "29 Sep 2023" in data_elemento:
-           
-           for i in range(1, quantidade_elementos + 1): 
-            # Clicar nos três pontos
-            xpath_trespontos = f"/html/body/div[2]/div/div[2]/div[2]/div[2]/div/div[4]/table/tbody/tr[{i}]/td[6]/div/i"
-            trespontos_elemento = WebDriverWait(driver, 30).until(EC.visibility_of_element_located((By.XPATH, xpath_trespontos))) #problema ta aqui arthur # aqui, ele nao ta mudando o xpath, ta sempre pegando o primeiro tres pontos
-            trespontos_elemento.click()
-
-            print(f"Clicou nos três pontos do elemento {i}") 
+        if data_element.text == texto_desejado:
+            ponto_element.click()
 
             time.sleep(2)
             # Realizar as ações após clicar nos três pontos
@@ -86,55 +82,79 @@ for elemento, trespontos in zip(elemento_data, trespontosdownload):
             pyautogui.press("TAB")
             time.sleep(1)
             pyautogui.press("TAB")
-            time.sleep(1)   
+            time.sleep(1)
             pyautogui.press("ENTER")
             time.sleep(9)
             pyautogui.press("ESC")
-            time.sleep(2)
-
-            print(f"Ações concluídas para o elemento {i}")
-            
+            time.sleep(1)
+            continue
         else:
-                print(f"A Data{data_elemento} não corresponde")
+            print("NÃO FOI LOCALIZADO NENHUMA DATA NA VEZ", i)
+            continue
+for i in range (min(len(elemento_data), len(trespontosdownload))):
+    data_element = elemento_data[i]
+    ponto_element = trespontosdownload[i]
 
-    except Exception as e:
-        print(f"Erro: {e}")
+    if data_element.text == texto_desejado:
+        ponto_element.click()
 
- #if driver.find_element(By.XPATH, "/html/body/div[4]/div/div[2]/div[2]/div[2]/div/div[4]/table/tbody/tr[20]/td[2]/small").text == "29 Sep 2023":
-
-
-    try:
         time.sleep(2)
-        avancarbotton = driver.find_element(By.XPATH, "/html/body/div[4]/div/div[2]/div[2]/div[2]/div/div[4]/div[1]/div/div/ul/li[7]/a")
-        avancarbotton.click()
-        
-    except NoSuchElementException:
-        print("Aqui estou sendo executado pq nao achei o avancarbotton")        
+        # Realizar as ações após clicar nos três pontos
+        pyautogui.press("TAB")
+        time.sleep(0.2)
+        pyautogui.press("TAB")
+        time.sleep(0.2)
+        pyautogui.press("TAB")
+        time.sleep(0.2)
+        pyautogui.press("TAB")
+        time.sleep(0.2)
+        pyautogui.press("TAB")
+        time.sleep(0.2)
+        pyautogui.press("ENTER")
+        time.sleep(9)
+        pyautogui.press("ESC")
+        time.sleep(1)
+        continue
+    else:
+        print("NÃO FOI LOCALIZADO NENHUMA DATA NA VEZ", i)
+        continue
+datafinal = driver.find_element(By.XPATH, "/html/body/div[2]/div/div[2]/div[2]/div[2]/div/div[4]/table/tbody/tr[20]/td[2]/small").text
+if datafinal == texto_desejado:
+    avancarbotton = driver.find_element(By.XPATH, "/html/body/div[2]/div/div[2]/div[2]/div[2]/div/div[4]/div[1]/div/div/ul/li[7]/a")
+
+    avancarbotton.click()
+    time.sleep(3)
+    try:
+        verificacao_dataeponto()
+    except:
+        print("aqui estou sendo executado porque eu nao sou igual o texto 03 Oct 2023")
+        wait = WebDriverWait(driver, 30)
+        time.sleep(3)
+        pyautogui.hotkey('winleft', 'r')
+        time.sleep(2)
+        pyautogui.write('shell:downloads')
+        pyautogui.press('enter')
+        time.sleep(4)
+        pyautogui.hotkey('ctrl', 'e')
+        time.sleep(2)
+        pyautogui.write('PCMSO')
+        pyautogui.press('enter')
+        time.sleep(4)
+        pyautogui.hotkey('ctrl', 'a')
+        time.sleep(2)
+        pyautogui.hotkey('ctrl', 'x')
+        time.sleep(3)
+        pyautogui.hotkey('winleft', 'r')
+        time.sleep(3)
+        pyautogui.write('C:/Users/ProOcupacional/Downloads/DOWNLOADS_')
+        time.sleep(1)
+        pyautogui.press('enter')
+        time.sleep(1)
+        pyautogui.hotkey('ctrl', 'v')
+
 else:
-    print("aqui estou sendo executado porque eu nao sou igual o texto 29 sep 2023")
-    wait = WebDriverWait(driver, 30)
-    time.sleep(3)
-    pyautogui.hotkey('winleft', 'r')
-    time.sleep(2)
-    pyautogui.write('shell:downloads')
-    pyautogui.press('enter')
-    time.sleep(4)
-    pyautogui.hotkey('ctrl', 'e')
-    time.sleep(2)
-    pyautogui.write('PCMSO')
-    pyautogui.press('enter')
-    time.sleep(4)
-    pyautogui.hotkey('ctrl', 'a')
-    time.sleep(2)
-    pyautogui.hotkey('ctrl', 'x')
-    time.sleep(3)
-    pyautogui.hotkey('winleft', 'r')
-    time.sleep(3)
-    pyautogui.write('C:/Users/arthu/Downloads/DOWNLOADS_')
-    time.sleep(2)
-    pyautogui.press('enter')
-    time.sleep(2)   
-    pyautogui.hotkey('ctrl', 'v')
+    print("não foi localizado elementos com a", texto_desejado, "na segunda pagina")
+
 
 
 # Fechar o navegador
