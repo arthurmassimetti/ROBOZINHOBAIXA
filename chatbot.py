@@ -8,7 +8,7 @@ import os
 import pyautogui
 
 # Caminho para a pasta de destino
-pasta_destino = r'C:/Users/ProOcupacional/Downloads/DOWNLOADS_'
+pasta_destino = r'#URL DA PAGINA DE DESTINO'
 url_site = 'https://secure.d4sign.com.br/login.html'
 
 # Inicialize o driver do Selenium (certifique-se de ter o WebDriver adequado instalado e configurado)
@@ -23,15 +23,15 @@ campo_email = driver.find_element(By.XPATH, '/html/body/div/div/div/div/div/div[
 campo_senha = driver.find_element(By.XPATH, '/html/body/div/div/div/div/div/div[1]/form/div[3]/div[2]/div[1]/input[1]')
 botao_logar = driver.find_element(By.XPATH, '/html/body/div/div/div/div/div/div[1]/form/div[3]/button')
 
-campo_email.send_keys("wendy.dias@proocupacional.com.br")
-campo_senha.send_keys("28012016")
+campo_email.send_keys("EMAIL PARA LOGIN")
+campo_senha.send_keys("SENHA PARA LOGIN")
 botao_logar.click()
 
 # Espere até que uma condição seja satisfeita, por exemplo, que uma página específica seja carregada
 wait = WebDriverWait(driver, 30)
 
 # Abra a página de download
-cofrepcmso = driver.find_element(By.XPATH, "//small[contains(text(), 'PCMSO - PRO OCUPACIONAL')]").click()
+cofrepcmso = driver.find_element(By.XPATH, "//small[contains(text(), '#Nome da pasta que é armazenada os PCMSO')]").click()
 time.sleep(2)
 
 elementos_finalizados = driver.find_elements(By.XPATH, "//span[text()='FINALIZADO']")
@@ -146,7 +146,7 @@ if datafinal == texto_desejado:
         time.sleep(3)
         pyautogui.hotkey('winleft', 'r')
         time.sleep(3)
-        pyautogui.write('C:/Users/ProOcupacional/Downloads/DOWNLOADS_')
+        pyautogui.write('#URL DA PAGINA DE DESTINO')
         time.sleep(1)
         pyautogui.press('enter')
         time.sleep(1)
